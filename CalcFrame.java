@@ -238,7 +238,459 @@ public class CalcFrame extends JFrame {
 		this.setVisible(true);
 	}//end of constructor
 	
-	
+	private class Action implements ActionListener{
+        
+        @Override
+        public void actionPerformed(ActionEvent e){
+        	
+            if( ! (e.getSource()==b1 || e.getSource()==b2 || e.getSource()==b3 ||e.getSource()==b4 ||
+                            e.getSource()==b5 ||e.getSource()==b6 ||e.getSource()==b7 ||e.getSource()==b8 ||
+                            e.getSource()==b9 ||e.getSource()==b0 ||e.getSource()== bDot ||e.getSource()==bPm)) 
+            {
+                    isDot=false;
+            }
+            if(e.getSource() == bClr || e.getSource()==iClr)
+            {
+                result="";
+                lastChar=' ';
+            }
+            else if(e.getSource() == bDel)
+            {
+                int pos = result.length()-1;
+
+                if(pos>=0)
+                {
+                    if(lastChar == '(')
+                    {
+                            do{
+                                if(pos>0)
+                                lastChar=result.charAt(--pos);
+                                else {
+                                    --pos;
+                                    break;
+                                }
+                            }while( (lastChar>='a' && lastChar<='z') ||lastChar=='^');
+                            pos++;
+                            result= result.substring(0, pos);
+                    }
+                    else
+                        result= result.substring(0, pos);
+                }
+
+                if(pos>0)
+                    lastChar = result.charAt(pos-1);
+                else
+                    lastChar=' ';
+
+            }
+            else if(e.getSource() == bExit ||e.getSource()== iExit)
+                System.exit(0);
+
+            else if(e.getSource() == b0)
+            {
+                if(lastChar==')' || lastChar=='!' || lastChar=='π')
+                   result+="*0";
+                else
+                   result+="0"; 
+                lastChar = '0';
+            }
+            else if(e.getSource() == b1)
+            {
+                if(lastChar==')' || lastChar=='!' || lastChar=='π')
+                   result+="*1";
+                else
+                   result+="1"; 
+                lastChar = '1';
+            }
+            else if(e.getSource() == b2)
+            {
+                if(lastChar==')' || lastChar=='!' || lastChar=='π')
+                   result+="*2";
+                else
+                   result+="2"; 
+                lastChar = '2';
+            }
+            else if(e.getSource() == b3)
+            {
+                if(lastChar==')' || lastChar=='!' || lastChar=='π')
+                   result+="*3";
+                else
+                   result+="3"; 
+                lastChar = '3';
+            }
+            else if(e.getSource() == b4)
+            {
+                if(lastChar==')' || lastChar=='!' || lastChar=='π')
+                   result+="*4";
+                else
+                   result+="4"; 
+                lastChar = '4';
+            }
+            else if(e.getSource() == b5)
+            {
+                if(lastChar==')' || lastChar=='!' || lastChar=='π')
+                   result+="*5";
+                else
+                   result+="5"; 
+                lastChar = '5';
+            }
+            else if(e.getSource() == b6)
+            {
+                if(lastChar==')' || lastChar=='!' || lastChar=='π')
+                   result+="*6";
+                else
+                   result+="6"; 
+                lastChar = '6';
+            }
+            else if(e.getSource() == b7)
+            {
+                if(lastChar==')' || lastChar=='!' || lastChar=='π')
+                   result+="*7";
+                else
+                   result+="7"; 
+                lastChar = '7';
+            }
+            
+            else if(e.getSource() == b8)
+            {
+                if(lastChar==')' || lastChar=='!' || lastChar=='π')
+                   result+="*8";
+                else
+                   result+="8"; 
+                lastChar = '8';
+            }
+            else if(e.getSource() == b9)
+            {
+                if(lastChar==')' || lastChar=='!' || lastChar=='π')
+                   result+="*9";
+                else
+                   result+="9"; 
+                lastChar = '9';
+            }
+            else if(e.getSource() == bMul)
+            {
+                if((lastChar>='0' && lastChar<='9') || lastChar=='.' || lastChar==')' || lastChar=='!' || lastChar=='π')
+                {
+                    result+="*"; lastChar = '*';
+                } 
+            }
+            else if(e.getSource() == bDiv)
+            {
+                if((lastChar>='0' && lastChar<='9') || lastChar=='.' || lastChar==')' || lastChar=='!' || lastChar=='π')
+                {
+                    result+="/"; lastChar = '/';
+                } 
+            }
+            else if(e.getSource() == bPlus)
+            {
+                result+="+";  lastChar = '+';
+            }
+                 
+            
+            else if(e.getSource() == bMinus)
+            {
+                result+="-";lastChar = '-';
+            } 
+            
+            else if(e.getSource() == bDot)
+            { 
+            	if( lastChar=='(' || lastChar=='*' || lastChar=='/' || lastChar=='+'|| lastChar=='-' || result.isEmpty()) 
+                {
+               	result+="0.";lastChar='.';
+               	isDot = true;
+                }
+            	
+            	else if(lastChar==')' || lastChar=='!' || lastChar=='π')
+                {
+                    result+="*0."; lastChar = '.';
+                    isDot = true;
+                }
+            	else if(lastChar>='0' && lastChar<='9' && !isDot)
+            	{
+            		result+="."; lastChar = '.';
+            		isDot = true;
+            	}
+                
+             }
+            
+            else if(e.getSource() == bPm)
+            {//implement +- here
+                if( (lastChar>='0' && lastChar<='9') || lastChar=='.' || lastChar=='π')
+                {
+                    int pos = result.length()-1;
+
+                       while( pos>0 &&( (result.charAt(pos)>='0' && result.charAt(pos)<='9') 
+                               || result.charAt(pos)=='.' || result.charAt(pos)=='π') )
+                       {
+                           pos--;
+                       }
+                       if(pos>0)
+                       {
+                           if(result.charAt(pos)=='-')
+                               result =result.substring(0, pos)+"+"+result.substring(pos+1);
+                           else if(result.charAt(pos)=='+')
+                               result =result.substring(0, pos)+"-"+result.substring(pos+1);
+                           else
+                               result = result.substring(0, pos+1)+"-"+result.substring(pos+1);
+                       }
+                           
+                       else // pos==0 which means that the number is the first number in the string
+                       {
+                           if(result.charAt(pos)=='-')
+                               result ="+"+result.substring(pos+1);
+                           else if(result.charAt(pos)=='+')
+                               result ="-"+result.substring(pos+1);
+                           else
+                               result ="-"+result.substring(pos);
+                       }
+                }
+            }
+            else if(e.getSource() == bRec)
+            {//implement 1/x here
+                if((lastChar>='0' && lastChar<='9') || lastChar=='.' || lastChar==')' || lastChar=='!' || lastChar=='π')
+                {
+                    result+="^(-1)"; lastChar = ')';
+                } 
+            }
+            
+            
+            else if(e.getSource() == bPow_2)
+            {
+                if((lastChar>='0' && lastChar<='9') || lastChar=='.' || lastChar==')' || lastChar=='!' || lastChar=='π')
+                {
+                    result+="^(2)"; lastChar = ')';
+                } 
+            }
+            else if(e.getSource() == bPow_3)
+            {
+                if((lastChar>='0' && lastChar<='9') || lastChar=='.' || lastChar==')' || lastChar=='!' || lastChar=='π')
+                {
+                    result+="^(3)"; lastChar = ')';
+                } 
+            }
+            else if(e.getSource() == bPow_y)
+            {
+                if((lastChar>='0' && lastChar<='9') || lastChar=='.' || lastChar==')' || lastChar=='!' || lastChar=='π')
+                {
+                    result+="^("; lastChar = '(';
+                } 
+            }
+            else if(e.getSource() == bL)
+            {
+                if((lastChar>='0' && lastChar<='9') || lastChar=='.' || lastChar==')' || lastChar=='!' || lastChar=='π')
+                    result+="*(";
+                else
+                    result+="(";
+                lastChar = '(';
+            }
+            else if(e.getSource() == bR)
+            {
+                if((lastChar>='0' && lastChar<='9') || lastChar=='.' || lastChar=='!' || lastChar=='π' || lastChar==')')
+                {
+                    result+=")"; lastChar = ')';
+                }
+                
+            }
+            else if(e.getSource() == bRoot)
+            {
+                if((lastChar>='0' && lastChar<='9') || lastChar=='.' || lastChar==')' || lastChar=='!' || lastChar=='π')
+                    result+="*sqrt(";
+                else
+                    result+="sqrt(";
+                lastChar = '(';
+            }
+            else if(e.getSource() == bRoot2)
+            {
+                if((lastChar>='0' && lastChar<='9') || lastChar=='.' || lastChar==')' || lastChar=='!' || lastChar=='π')
+                    result+="*cbrt(";
+                else
+                    result+="cbrt(";
+                lastChar = '(';
+            }
+            else if(e.getSource() == bRooty)
+            {
+                if((lastChar>='0' && lastChar<='9') || lastChar=='.' || lastChar==')' || lastChar=='!' || lastChar=='π')
+                {
+                    result+="root("; lastChar = '(';
+                }
+            }
+            else if(e.getSource() == bFac)
+            {
+                if((lastChar>='0' && lastChar<='9') || lastChar==')')
+                {
+                    result+="!"; lastChar = '!';
+                }
+            }
+            else if(e.getSource() == bSin)
+            {
+                if((lastChar>='0' && lastChar<='9') || lastChar=='.' || lastChar==')' || lastChar=='!' || lastChar=='π')
+                    result+="*sin(";
+                else
+                    result+="sin(";
+                lastChar = '(';
+            }
+            else if(e.getSource() == bCos)
+            {
+                if((lastChar>='0' && lastChar<='9') || lastChar=='.' || lastChar==')' || lastChar=='!' || lastChar=='π')
+                    result+="*cos(";
+                else
+                    result+="cos(";
+                lastChar = '(';
+            }
+            else if(e.getSource() == bTan)
+            {
+                if((lastChar>='0' && lastChar<='9') || lastChar=='.' || lastChar==')' || lastChar=='!' || lastChar=='π')
+                    result+="*tan(";
+                else
+                    result+="tan(";
+                lastChar = '(';
+            }
+            else if(e.getSource() == bAsin)
+            {
+                if((lastChar>='0' && lastChar<='9') || lastChar=='.' || lastChar==')' || lastChar=='!' || lastChar=='π')
+                    result+="*asin(";
+                else
+                    result+="asin(";
+                lastChar = '(';
+            }
+            else if(e.getSource() == bAcos)
+            {
+                if((lastChar>='0' && lastChar<='9') || lastChar=='.' || lastChar==')' || lastChar=='!' || lastChar=='π')
+                    result+="*acos(";
+                else
+                    result+="acos(";
+                lastChar = '(';
+            }
+            else if(e.getSource() == bAtan)
+            {
+                if((lastChar>='0' && lastChar<='9') || lastChar=='.' || lastChar==')' || lastChar=='!' || lastChar=='π')
+                    result+="*atan(";
+                else
+                    result+="atan(";
+                lastChar = '(';
+            }
+            else if(e.getSource() == bSinh)
+            {
+                if((lastChar>='0' && lastChar<='9') || lastChar=='.' || lastChar==')' || lastChar=='!' || lastChar=='π')
+                    result+="*sinh(";
+                else
+                    result+="sinh(";
+                lastChar = '(';
+            }
+            else if(e.getSource() == bCosh)
+            {
+                if((lastChar>='0' && lastChar<='9') || lastChar=='.' || lastChar==')' || lastChar=='!' || lastChar=='π')
+                    result+="*cosh(";
+                else
+                    result+="cosh(";
+                lastChar = '(';
+            }
+            else if(e.getSource() == bTanh)
+            {
+                if((lastChar>='0' && lastChar<='9') || lastChar=='.' || lastChar==')' || lastChar=='!' || lastChar=='π')
+                    result+="*tanh(";
+                else
+                    result+="tanh(";
+                lastChar = '(';
+            }
+            else if(e.getSource() == bExp)
+            {
+                if((lastChar>='0' && lastChar<='9') || lastChar=='.' || lastChar==')' || lastChar=='!' || lastChar=='π')
+                    result+="*e^(";
+                else
+                    result+="e^(";
+                lastChar = '(';
+            }
+            else if(e.getSource() == bLog)
+            {
+                if((lastChar>='0' && lastChar<='9') || lastChar=='.' || lastChar==')' || lastChar=='!' || lastChar=='π')
+                    result+="*ln(";
+                else
+                    result+="ln(";
+                lastChar = '(';
+            }
+            else if(e.getSource() == bLog10)
+            {
+                if((lastChar>='0' && lastChar<='9') || lastChar=='.' || lastChar==')' || lastChar=='!' || lastChar=='π')
+                    result+="*log(";
+                else
+                    result+="log(";
+                lastChar = '(';
+            }
+            else if(e.getSource() == bNpr)
+            {
+                //this function n and r must be int >=0 and n>=r 
+                if((lastChar>='0' && lastChar<='9') || lastChar==')' || lastChar=='!')
+                {
+                    result+="P"; lastChar = 'P';
+                }
+            }
+            else if(e.getSource() == bNcr)
+            {
+                //this function n and r must be int >=0 and n>=r 
+                if((lastChar>='0' && lastChar<='9') || lastChar==')' || lastChar=='!')
+                {
+                    result+="C"; lastChar = 'C';
+                }
+            }
+            else if(e.getSource() == bPi)
+            {
+                if((lastChar>='0' && lastChar<='9') || lastChar=='.' || lastChar==')' || lastChar=='!' || lastChar=='π')
+                {
+                    result+="*π";
+                    lastChar = 'π';
+                }
+                else
+                {
+                	result+="π"; lastChar = 'π';
+                
+                }
+                
+            }
+            //refresh the textField every time a button is pressed with the new string
+            userInput.setText(result);
+            
+             if(e.getSource() == bAns)
+             {
+            	CalcEval val = new CalcEval(result);
+            	//if the string is empty 
+                if(result.isEmpty())
+                	JOptionPane.showMessageDialog(null, "No Input.");
+                	
+                else {
+                	BigDecimal res = val.eval();
+                        if(res.scale()>5)
+                            res=res.setScale(5, RoundingMode.HALF_UP);
+                        
+                	if(val.isException()) {
+                		JOptionPane.showMessageDialog(null, "Math Error.");
+                		result="";
+                        lastChar=' ';
+                        userInput.setText(result);
+                	}
+                        
+       	    		else {
+                            // to format the string before outputing it on the text field
+                            // if the number of digits before the decimal point >10 format it as #.10digits E
+                            // else print it as a plainString
+                   	    final int scale = 10;
+                   	    if (res.precision()-res.scale() > scale)
+                   	    	userInput.setText(String.format(result+" = %.9E", res));
+                   	    else
+                   	    	userInput.setText(result+" = "+res.toPlainString());
+                   	    
+                   	    result="";
+                   	    lastChar=' ';
+       	    		}
+                   
+                }
+                
+                
+            }
+       }
+
+   
+   }// end of Action Listener
 	
 	private class showHide implements ItemListener{
 
