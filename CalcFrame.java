@@ -279,6 +279,187 @@ public class CalcFrame extends JFrame {
 		
 	}//end of itemListener
 	
+	public class KeyBoard implements KeyListener{
 
+		@Override
+		public void keyPressed(KeyEvent event) {
+			
+                    int key=event.getKeyCode();
+                        
+                    if( ! (key==KeyEvent.VK_NUMPAD1||key ==KeyEvent.VK_NUMPAD2|| key==KeyEvent.VK_NUMPAD3 ||key==KeyEvent.VK_NUMPAD4 ||
+                            key==KeyEvent.VK_NUMPAD5 ||key==KeyEvent.VK_NUMPAD6 ||key==KeyEvent.VK_NUMPAD7 ||key==KeyEvent.VK_NUMPAD8 ||
+                            key==KeyEvent.VK_NUMPAD9 ||key==KeyEvent.VK_NUMPAD0 ||key== 110)) 
+                    {
+        		isDot=false;
+                    }
+			
+			
+                    if(key==KeyEvent.VK_NUMPAD1) {
+			
+                        if(lastChar==')' || lastChar=='!' || lastChar=='π')
+                            result+="*1";
+                        else 
+                           result+="1"; 
+                
+                        lastChar = '1';
+	                
+                    }
+			
+                    else if(key==KeyEvent.VK_NUMPAD2) {
+					
+                        if(lastChar==')' || lastChar=='!' || lastChar=='π')
+                            result+="*2";
+                        else 
+                            result+="2"; 
+	                
+                        lastChar = '2';
+	                
+			}
+                    else if(key==KeyEvent.VK_NUMPAD3) {
+				
+                        if(lastChar==')' || lastChar=='!' || lastChar=='π')
+                            result+="*3";
+                        else 
+                            result+="3"; 
+	                
+                        lastChar = '3';
+	                
+			}
+                    else if(key==KeyEvent.VK_NUMPAD4) {
+				
+                        if(lastChar==')' || lastChar=='!' || lastChar=='π')
+                            result+="*4";
+                         else 
+                             result+="4"; 
+	                
+                        lastChar = '4';
+	                
+			}
+                    else if(key==KeyEvent.VK_NUMPAD5) {
+				
+                        if(lastChar==')' || lastChar=='!' || lastChar=='π')
+                            result+="*5";
+                        else 
+                            result+="5"; 
+	                
+                        lastChar = '5';
+	                
+                    }
+                    else if(key==KeyEvent.VK_NUMPAD6) {
+				
+                        if(lastChar==')' || lastChar=='!' || lastChar=='π')
+                            result+="*6";
+                        else 
+                            result+="6"; 
+	                
+                        lastChar = '6';
+	                
+                    }
+                    else if(key==KeyEvent.VK_NUMPAD7) {
+				
+                        if(lastChar==')' || lastChar=='!' || lastChar=='π')
+                            result+="*7";
+                        else 
+                            result+="7"; 
+	                
+                        lastChar = '7';
+	                
+			}
+                    else if(key==KeyEvent.VK_NUMPAD8) {
+				
+                            if(lastChar==')' || lastChar=='!' || lastChar=='π')
+                                result+="*8";
+                            else 
+                                result+="8"; 
+
+                            lastChar = '8';
+	                
+			}
+			else if(key==KeyEvent.VK_NUMPAD9) {
+
+                            if(lastChar==')' || lastChar=='!' || lastChar=='π')
+                                result+="*9";
+                            else 
+                                result+="9"; 
+
+                            lastChar = '9';
+
+			}
+			else if(key==KeyEvent.VK_NUMPAD0) {
+				
+                            if(lastChar==')' || lastChar=='!' || lastChar=='π')
+                                result+="*0";
+                            else 
+                                result+="0"; 
+	                
+                            lastChar = '0';
+	                
+			}
+                        else if(key==110) {
+                            if( lastChar=='(' || lastChar=='*' || lastChar=='/' || lastChar=='+'|| lastChar=='-' || result.isEmpty()) 
+                            {
+                                result+="0.";lastChar='.';
+                                isDot = true;
+                            }
+            	
+                            else if(lastChar==')' || lastChar=='!' || lastChar=='π')
+                            {
+                                result+="*0."; lastChar = '.';
+                                isDot = true;
+                            }
+                            else if(lastChar>='0' && lastChar<='9' && !isDot)
+                            {
+                                result+="."; lastChar = '.';
+                                isDot = true;
+                            }
+			}
+			
+			userInput.setText(result);
+			
+			if(key== KeyEvent.VK_ENTER)
+			{
+                            CalcEval val = new CalcEval(result);
+                            //if the string is empty 
+                            if(result.isEmpty())
+                                    JOptionPane.showMessageDialog(null, "No Input.");
+
+                            else {
+                                    BigDecimal res = val.eval();
+                                    if(res.scale()>5)
+                                        res=res.setScale(5, RoundingMode.HALF_UP);
+
+                                    if(val.isException()) {
+                                            JOptionPane.showMessageDialog(null, "Math Error.");
+                                            result="";
+                                    lastChar=' ';
+                                    userInput.setText(result);
+                                    }
+
+                                    else {
+                                        // to format the string before outputing it on the text field
+                                        // if the number of digits before the decimal point >10 format it as #.10digits E
+                                        // else print it as a plainString
+                                        final int scale = 10;
+                                        if (res.precision()-res.scale() > scale)
+                                            userInput.setText(String.format(result+" = %.9E", res));
+                                        else
+                                            userInput.setText(result+" = "+res.toPlainString());
+
+                                        result="";
+                                        lastChar=' ';
+                                    }
+                   
+                }
+            }
+			
+        }
+
+		@Override
+		public void keyReleased(KeyEvent arg0) {}
+
+		@Override
+		public void keyTyped(KeyEvent arg0) {}
+		
+	}
 	
 }//end of CalcFrame class
